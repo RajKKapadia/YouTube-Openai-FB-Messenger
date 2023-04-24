@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
   let token = req.query['hub.verify_token'];
   let challenge = req.query['hub.challenge'];
   if (mode && token) {
-    if (mode === 'subscribe' && token === process.env.VERIFY_TOEKN) {
+    if (mode === 'subscribe' && token === process.env.VERIFY_TOKEN) {
       console.log('WEBHOOK_VERIFIED');
       res.status(200).send(challenge);
     } else {
@@ -30,7 +30,6 @@ router.post('/', async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-  
   res.status(200).send('OK');
 });
 

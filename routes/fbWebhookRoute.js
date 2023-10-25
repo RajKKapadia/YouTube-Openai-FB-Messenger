@@ -28,6 +28,8 @@ router.post('/', async (req, res) => {
     let result = await chatCompletion(query);
     await sendMessage(senderId, result.response);
     await setTypingOff(senderId);
+    console.log(senderId);
+    console.log(result.response);
   } catch (error) {
     console.log(error);
   }

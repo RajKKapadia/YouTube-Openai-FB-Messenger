@@ -3,7 +3,7 @@ const router = express.Router();
 require('dotenv').config();
 
 const { chatCompletion } = require('../helper/openaiApi');
-const { sendMessage } = require('../helper/messengerApi');
+const { sendMessage, setTypingOff, setTypingOn } = require('../helper/messengerApi');
 
 router.get('/', (req, res) => {
   let mode = req.query['hub.mode'];
@@ -22,11 +22,12 @@ router.get('/', (req, res) => {
 router.post('/', async (req, res) => {
   try {
     let body = req.body;
-    let requestType = body.object;
     let senderId = body.entry[0].messaging[0].sender.id;
     let query = body.entry[0].messaging[0].message.text;
+    await setTypingOn(senderId);
     let result = await chatCompletion(query);
     await sendMessage(senderId, result.response);
+    await setTypingOff(senderId);
   } catch (error) {
     console.log(error);
   }
